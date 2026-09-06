@@ -107,6 +107,7 @@
 .prints-slide img {
   width: 100%;
   height: auto;
+  max-height: none;
   object-fit: contain;
   border-radius: 10px;
   border: 2px solid #00ff00;
@@ -373,14 +374,23 @@ function showPrint(index) {
     `translateX(-${printIndex * 100}%)`;
 
   printsDots.forEach((dot, i) => {
-
-    dot.classList.toggle(
-      'active',
-      i === printIndex
-    );
-
+    dot.classList.toggle('active', i === printIndex);
   });
 
+  const imagemAtual =
+    printsTrack.children[printIndex].querySelector('img');
+
+  if (imagemAtual) {
+    if (imagemAtual.complete) {
+      printsCarousel.style.height =
+        imagemAtual.offsetHeight + 'px';
+    } else {
+      imagemAtual.onload = () => {
+        printsCarousel.style.height =
+          imagemAtual.offsetHeight + 'px';
+      };
+    }
+  }
 }
 
 
